@@ -5,7 +5,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
 
 afterAll(() => {
-  if (db.end) db.end();
+  return db.end();
 });
 
 beforeEach(() => {
