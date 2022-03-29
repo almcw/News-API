@@ -68,4 +68,13 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe("No article found for article_id: 199");
       });
   });
+
+  test("returns status 400 with bad article_id", () => {
+    return request(app)
+      .get("/api/articles/baddy")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
 });

@@ -12,7 +12,6 @@ exports.selectArticleById = (article_id) => {
     )
     .then((result) => {
       const article = result.rows[0];
-      console.log(article);
       if (!article) {
         return Promise.reject({
           status: 404,
