@@ -78,3 +78,26 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 });
+
+describe.only("GET /api/users", () => {
+  test("should return status 200", () => {
+    return request(app).get("/api/users").expect(200);
+  });
+
+  test("should return an array of objects", () => {
+    return request(app)
+      .get("/api/users")
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        expect(users).toHaveLength(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
