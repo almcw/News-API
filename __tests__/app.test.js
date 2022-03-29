@@ -79,8 +79,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-
-describe.only("PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
   test("returns status 200", () => {
     return request(app)
       .patch("/api/articles/1")
@@ -153,27 +152,27 @@ describe.only("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("No article found for article_id: 199");
       });
   });
-=======
-describe.only("GET /api/users", () => {
-  test("should return status 200", () => {
-    return request(app).get("/api/users").expect(200);
-  });
 
-  test("should return an array of objects", () => {
-    return request(app)
-      .get("/api/users")
-      .then(({ body }) => {
-        const { users } = body;
-        expect(users).toBeInstanceOf(Array);
-        expect(users).toHaveLength(4);
-        users.forEach((user) => {
-          expect(user).toEqual(
-            expect.objectContaining({
-              username: expect.any(String),
-            })
-          );
+  describe("GET /api/users", () => {
+    test("should return status 200", () => {
+      return request(app).get("/api/users").expect(200);
+    });
+
+    test("should return an array of objects", () => {
+      return request(app)
+        .get("/api/users")
+        .then(({ body }) => {
+          const { users } = body;
+          expect(users).toBeInstanceOf(Array);
+          expect(users).toHaveLength(4);
+          users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+              })
+            );
+          });
         });
-      });
+    });
   });
-
 });
