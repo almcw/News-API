@@ -41,3 +41,40 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("returns status 200", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual({
+          article_id: 1,
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          votes: 100,
+        });
+      });
+  });
+
+  test("returns status 404 with non-existant article_id", () => {
+    return request(app)
+      .get("/api/articles/199")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No article found for article_id: 199");
+      });
+  });
+
+  test("returns status 400 with bad article_id", () => {
+    return request(app)
+      .get("/api/articles/baddy")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
