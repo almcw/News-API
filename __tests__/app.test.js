@@ -79,81 +79,6 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-
-describe.only("PATCH /api/articles/:article_id", () => {
-  test("returns status 200", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: 5 })
-      .expect(200);
-  });
-
-  test("updates votes for a given article correctly", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: 4 })
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.article).toEqual({
-          article_id: 1,
-          author: "butter_bridge",
-          body: "I find this existence challenging",
-          created_at: "2020-07-09T20:11:00.000Z",
-          title: "Living in the shadow of a great man",
-          topic: "mitch",
-          votes: 104,
-        });
-      });
-  });
-
-  test("updates NEGATIVE votes for a given article correctly", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ inc_votes: -3 })
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.article).toEqual({
-          article_id: 1,
-          author: "butter_bridge",
-          body: "I find this existence challenging",
-          created_at: "2020-07-09T20:11:00.000Z",
-          title: "Living in the shadow of a great man",
-          topic: "mitch",
-          votes: 97,
-        });
-      });
-  });
-
-  test("should give bad request error when input object key is incorrect", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ incc_votes: 3 })
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
-      });
-  });
-
-  test("should give bad request error when input object value is incorrect", () => {
-    return request(app)
-      .patch("/api/articles/1")
-      .send({ incc_votes: "three" })
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
-      });
-  });
-
-  test("returns status 404 with non-existant article_id", () => {
-    return request(app)
-      .patch("/api/articles/199")
-      .send({ incc_votes: "three" })
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("No article found for article_id: 199");
-      });
-  });
-=======
 describe.only("GET /api/users", () => {
   test("should return status 200", () => {
     return request(app).get("/api/users").expect(200);
@@ -175,5 +100,4 @@ describe.only("GET /api/users", () => {
         });
       });
   });
-
 });
