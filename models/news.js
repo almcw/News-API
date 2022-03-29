@@ -22,6 +22,24 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
+exports.updateArticleVotes = (article_id, newVote) => {
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *;`,
+      [article_id, newVote]
+    )
+    .then((result) => {
+      const article = result.rows[0];
+      if (!article) {
+        return Promise.reject({
+          status: 404,
+          msg: `No article found for article_id: ${article_id}`,
+        });
+      }
+      return article;
+    });
+};
+
 exports.selectUsers = () => {
   return db.query("SELECT username from users;").then((result) => result.rows);
 };
