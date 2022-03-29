@@ -22,7 +22,6 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
-
 exports.updateArticleVotes = (article_id, newVote) => {
   return db
     .query(
@@ -40,7 +39,7 @@ exports.updateArticleVotes = (article_id, newVote) => {
       return article;
     });
 };
+
 exports.selectUsers = () => {
   return db.query("SELECT username from users;").then((result) => result.rows);
-
 };

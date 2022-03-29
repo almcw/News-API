@@ -1,8 +1,8 @@
 const {
   selectTopics,
   selectArticleById,
-  updateArticleVotes,
   selectUsers,
+  updateArticleVotes,
 } = require("../models/news");
 
 exports.getTopics = (req, res) => {
