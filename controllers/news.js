@@ -21,9 +21,19 @@ exports.getArticle = (req, res, next) => {
 
 exports.getArticleComments = (req, res, next) => {
   const articleId = req.params.article_id;
-  selectCommentsByArticleId(articleId)
-    .then((comments) => res.status(200).send({ comments }))
+  //selectCommentsByArticleId(articleId)
+  const promises = [
+    selectCommentsByArticleId(articleId),
+    selectArticleById(articleId),
+  ];
+  Promise.all(promises)
+    .then((results) => {
+      const comments = results[0];
+      res.send({ comments });
+    })
     .catch(next);
+  // .then((comments) => res.status(200).send({ comments }))
+  // .catch(next);
 };
 
 exports.patchArticleVotes = (req, res, next) => {
