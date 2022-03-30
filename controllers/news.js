@@ -32,8 +32,6 @@ exports.getArticleComments = (req, res, next) => {
       res.send({ comments });
     })
     .catch(next);
-  // .then((comments) => res.status(200).send({ comments }))
-  // .catch(next);
 };
 
 exports.patchArticleVotes = (req, res, next) => {
