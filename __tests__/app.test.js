@@ -177,7 +177,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("should return status 200 and an array of comments for given article_id ", () => {
     return request(app)
       .get("/api/articles/1/comments")
