@@ -78,15 +78,6 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe("bad request");
       });
   });
-
-  test("should return an object that includes the comment_count property", () => {
-    return request(app)
-      .get("/api/articles/1")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.article).toHaveProperty("comment_count");
-      });
-  });
 });
 
 describe("PATCH /api/articles/:article_id", () => {
@@ -165,13 +156,10 @@ describe("PATCH /api/articles/:article_id", () => {
 });
 
 describe("GET /api/users", () => {
-  test("should return status 200", () => {
-    return request(app).get("/api/users").expect(200);
-  });
-
-  test("should return an array of objects", () => {
+  test("should return 200 and an array of objects", () => {
     return request(app)
       .get("/api/users")
+      .expect(200)
       .then(({ body }) => {
         const { users } = body;
         expect(users).toBeInstanceOf(Array);
