@@ -45,5 +45,9 @@ exports.selectUsers = () => {
 };
 
 exports.selectArticles = () => {
-  return db.query("SELECT * from articles;").then((result) => result.rows);
+  return db
+    .query(
+      "SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id, users.username ORDER BY created_at DESC ;"
+    )
+    .then((result) => result.rows);
 };

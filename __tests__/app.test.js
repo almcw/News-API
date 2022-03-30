@@ -177,25 +177,26 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe.only("GET /api/articles", () => {
-  test("returns 200 and expected array of objects", () => {
+describe("GET /api/articles", () => {
+  test("returns 200 and expected array of objects in descending order of created_at", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
-        expect(articles).toHaveLength(3);
+        expect(articles).toBeSorted({ key: "created_at", descending: true });
+        expect(articles).toHaveLength(12);
         articles.forEach((articles) => {
-          expect(article).toEqual(
+          expect(articles).toEqual(
             expect.objectContaining({
               article_id: expect.any(Number),
               author: expect.any(String),
-              body: expect.any(String),
               created_at: expect.any(String),
               title: expect.any(String),
               topic: expect.any(String),
               votes: expect.any(Number),
+              comment_count: expect.any(Number),
             })
           );
         });
