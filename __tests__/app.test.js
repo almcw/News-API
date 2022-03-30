@@ -176,3 +176,46 @@ describe("PATCH /api/articles/:article_id", () => {
     });
   });
 });
+
+describe.only("GET /api/articles/:article_id/comments", () => {
+  test("should return status 200 and an array of comments for given article_id ", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(11);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              author: expect.any(String),
+              body: expect.any(String),
+              comment_id: expect.any(Number),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+
+  test("should return 200 no comments where no comments for an article", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No comments found for article_id: 2");
+      });
+  });
+
+  test("should return 400 Bad Request where article is non-integer", () => {
+    return request(app)
+      .get("/api/articles/baddy/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});

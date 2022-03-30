@@ -22,6 +22,25 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
+exports.selectCommentsByArticleId = (article_id) => {
+  return db
+    .query(
+      "select article_id, comment_id, votes, created_at, users.name AS author, body from comments INNER JOIN users ON comments.author = users.username where article_id = $1;",
+      [article_id]
+    )
+    .then((result) => {
+      const comments = result.rows;
+      console.log(comments);
+      if (!result.rows[0]) {
+        return Promise.reject({
+          status: 200,
+          msg: `No comments found for article_id: ${article_id}`,
+        });
+      }
+      return comments;
+    });
+};
+
 exports.updateArticleVotes = (article_id, newVote) => {
   return db
     .query(
