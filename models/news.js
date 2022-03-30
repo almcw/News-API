@@ -30,13 +30,6 @@ exports.selectCommentsByArticleId = (article_id) => {
     )
     .then((result) => {
       const comments = result.rows;
-      console.log(comments);
-      // if (!result.rows[0]) {
-      //   return Promise.reject({
-      //     status: 200,
-      //     msg: `No comments found for article_id: ${article_id}`,
-      //   });
-      // }
       return comments;
     });
 };
