@@ -43,7 +43,7 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("returns status 200", () => {
+  test("returns status 200 with returned object", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -56,6 +56,7 @@ describe("GET /api/articles/:article_id", () => {
           title: "Living in the shadow of a great man",
           topic: "mitch",
           votes: 100,
+          comment_count: 11,
         });
       });
   });
@@ -75,6 +76,15 @@ describe("GET /api/articles/:article_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
+      });
+  });
+
+  test("should return an object that includes the comment_count property", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toHaveProperty("comment_count");
       });
   });
 });
@@ -152,27 +162,27 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("No article found for article_id: 199");
       });
   });
+});
 
-  describe("GET /api/users", () => {
-    test("should return status 200", () => {
-      return request(app).get("/api/users").expect(200);
-    });
+describe("GET /api/users", () => {
+  test("should return status 200", () => {
+    return request(app).get("/api/users").expect(200);
+  });
 
-    test("should return an array of objects", () => {
-      return request(app)
-        .get("/api/users")
-        .then(({ body }) => {
-          const { users } = body;
-          expect(users).toBeInstanceOf(Array);
-          expect(users).toHaveLength(4);
-          users.forEach((user) => {
-            expect(user).toEqual(
-              expect.objectContaining({
-                username: expect.any(String),
-              })
-            );
-          });
+  test("should return an array of objects", () => {
+    return request(app)
+      .get("/api/users")
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        expect(users).toHaveLength(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+            })
+          );
         });
-    });
+      });
   });
 });
