@@ -43,3 +43,7 @@ exports.updateArticleVotes = (article_id, newVote) => {
 exports.selectUsers = () => {
   return db.query("SELECT username from users;").then((result) => result.rows);
 };
+
+exports.selectArticles = () => {
+  return db.query("SELECT * from articles;").then((result) => result.rows);
+};
