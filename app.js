@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
   if (badReqCodes.includes(err.code)) {
     res.status(400).send({ msg: "bad request" });
   } else if (invalidReqCodes.includes(err.code)) {
-    res.status(400).send({ msg: "invalid author" });
+    res.status(404).send({ msg: "user not found" });
   } else {
     next(err);
   }
