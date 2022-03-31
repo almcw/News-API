@@ -5,6 +5,7 @@ const {
   updateArticleVotes,
   selectCommentsByArticleId,
   selectArticles,
+  postComment,
 } = require("../models/news");
 
 exports.getTopics = (req, res) => {
@@ -49,8 +50,20 @@ exports.patchArticleVotes = (req, res, next) => {
     .then((article) => res.status(200).send({ article }))
     .catch(next);
 };
+
 exports.getUsers = (req, res, next) => {
   selectUsers().then((users) => {
     res.status(200).send({ users });
   });
+};
+
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+  selectArticleById(article_id)
+    .then((result) => postComment(article_id, username, body))
+    .then((results) => {
+      res.status(201).send({ comment: results });
+    })
+    .catch(next);
 };
