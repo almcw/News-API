@@ -21,7 +21,6 @@ exports.getArticle = (req, res, next) => {
 
 exports.getArticleComments = (req, res, next) => {
   const articleId = req.params.article_id;
-  //selectCommentsByArticleId(articleId)
   const promises = [
     selectCommentsByArticleId(articleId),
     selectArticleById(articleId),

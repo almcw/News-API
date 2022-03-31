@@ -25,7 +25,7 @@ exports.selectArticleById = (article_id) => {
 exports.selectCommentsByArticleId = (article_id) => {
   return db
     .query(
-      "select article_id, comment_id, votes, created_at, users.name AS author, body from comments INNER JOIN users ON comments.author = users.username where article_id = $1;",
+      "SELECT article_id, comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;",
       [article_id]
     )
     .then((result) => {
