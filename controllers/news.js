@@ -36,6 +36,8 @@ exports.getArticleComments = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
+  const { sort_by = "date", order = "desc", topic } = req.params;
+  console.log(sort_by, order, topic);
   selectArticles()
     .then((articles) => {
       res.status(200).send({ articles });

@@ -200,6 +200,10 @@ describe("GET /api/articles", () => {
         });
       });
   });
+
+  // test.only("defaults to sort_by of date and descending order with no params", () => {
+  //   return request(app).get("/api/articles").expect(200);
+  // });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
