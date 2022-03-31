@@ -23,6 +23,18 @@ exports.selectArticleById = (article_id) => {
     });
 };
 
+exports.selectCommentsByArticleId = (article_id) => {
+  return db
+    .query(
+      "SELECT article_id, comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1;",
+      [article_id]
+    )
+    .then((result) => {
+      const comments = result.rows;
+      return comments;
+    });
+};
+
 exports.updateArticleVotes = (article_id, newVote) => {
   return db
     .query(

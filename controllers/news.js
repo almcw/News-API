@@ -3,6 +3,7 @@ const {
   selectArticleById,
   selectUsers,
   updateArticleVotes,
+  selectCommentsByArticleId,
   selectArticles,
 } = require("../models/news");
 
@@ -16,6 +17,20 @@ exports.getArticle = (req, res, next) => {
   const articleId = req.params.article_id;
   selectArticleById(articleId)
     .then((article) => res.status(200).send({ article }))
+    .catch(next);
+};
+
+exports.getArticleComments = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const promises = [
+    selectCommentsByArticleId(articleId),
+    selectArticleById(articleId),
+  ];
+  Promise.all(promises)
+    .then((results) => {
+      const comments = results[0];
+      res.send({ comments });
+    })
     .catch(next);
 };
 
