@@ -44,3 +44,11 @@ exports.updateArticleVotes = (article_id, newVote) => {
 exports.selectUsers = () => {
   return db.query("SELECT username from users;").then((result) => result.rows);
 };
+
+exports.selectArticles = () => {
+  return db
+    .query(
+      "SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id, users.username ORDER BY created_at DESC ;"
+    )
+    .then((result) => result.rows);
+};
