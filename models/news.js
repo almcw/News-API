@@ -6,8 +6,9 @@ exports.selectTopics = () => {
 
 exports.selectArticleById = (article_id) => {
   return db
+
     .query(
-      "select users.username AS author, title, article_id, body, topic, created_at, votes from articles INNER JOIN users ON articles.author = users.username where article_id = $1;",
+      "select users.username AS author, title, articles.article_id, articles.body, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id where comments.article_id = $1 GROUP BY articles.article_id, users.username ;",
       [article_id]
     )
     .then((result) => {
@@ -54,4 +55,12 @@ exports.updateArticleVotes = (article_id, newVote) => {
 
 exports.selectUsers = () => {
   return db.query("SELECT username from users;").then((result) => result.rows);
+};
+
+exports.selectArticles = () => {
+  return db
+    .query(
+      "SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id, users.username ORDER BY created_at DESC ;"
+    )
+    .then((result) => result.rows);
 };
