@@ -244,3 +244,62 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("returns 201 and the new record created when passed valid object", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: "icellusedkars", body: "great work!" })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toEqual({
+          article_id: 1,
+          author: "icellusedkars",
+          body: "great work!",
+          comment_id: 19,
+          votes: 0,
+          created_at: expect.any(String),
+        });
+      });
+  });
+
+  test("returns ERROR when passed article_id that doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/999/comments")
+      .send({ username: "icellusedkars", body: "great work!" })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No article found for article_id: 999");
+      });
+  });
+
+  test("returns 400 error when passed user that doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: "almcw", body: "great work!" })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+
+  test("returns 400 error when passed incorrect object", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: "icellusedkars", bbody: "great work!" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+
+  test("returns 400 error when passed invalid article_id", () => {
+    return request(app)
+      .post("/api/articles/shrell/comments")
+      .send({ username: "icellusedkars", bbody: "great work!" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});
