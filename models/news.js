@@ -57,12 +57,37 @@ exports.selectUsers = () => {
   return db.query("SELECT username from users;").then((result) => result.rows);
 };
 
-exports.selectArticles = () => {
+exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
+  console.log(topic, "<<<<<<<<");
+  if (
+    ![
+      "created_at",
+      "allowed_column",
+      "users",
+      "author",
+      "title",
+      "article_id",
+      "topic",
+      "votes",
+      "comment_count",
+    ].includes(sort_by)
+  ) {
+    return Promise.reject({ status: 400, msg: "Invalid sort query" });
+  }
+  if (!["asc", "desc"].includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+  if (!["mitch", "cats", "paper"].includes(topic)) {
+    return Promise.reject({ status: 400, msg: "Invalid topic query" });
+  }
   return db
     .query(
-      "SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id, users.username ORDER BY created_at DESC ;"
+      `SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id, users.username ORDER BY ${sort_by} ${order} ;`
     )
-    .then((result) => result.rows);
+    .then((result) => {
+      console.log(result.rows);
+      return result.rows;
+    });
 };
 
 exports.postComment = (article_id, username, body) => {
