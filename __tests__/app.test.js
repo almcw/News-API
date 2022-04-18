@@ -314,6 +314,7 @@ describe.only("GET /api/articles", () => {
         });
     });
 
+
     test("returns ERROR when passed article_id that doesn't exist", () => {
       return request(app)
         .post("/api/articles/999/comments")
@@ -323,6 +324,17 @@ describe.only("GET /api/articles", () => {
           expect(body.msg).toBe("No article found for article_id: 999");
         });
     });
+
+  test("returns 400 error when passed user that doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: "almcw", body: "great work!" })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+
 
     test("returns 400 error when passed author that doesn't exist", () => {
       return request(app)
@@ -343,5 +355,15 @@ describe.only("GET /api/articles", () => {
           expect(body.msg).toBe("bad request");
         });
     });
+  });
+
+  test("returns 400 error when passed invalid article_id", () => {
+    return request(app)
+      .post("/api/articles/shrell/comments")
+      .send({ username: "icellusedkars", bbody: "great work!" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
   });
 });
