@@ -211,7 +211,7 @@ describe.only("GET /api/articles", () => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
         expect(articles).toBeSortedBy("created_at", { descending: true });
-        expect(articles).toHaveLength(12);
+        expect(articles).toHaveLength(11);
         articles.forEach((articles) => {
           expect(articles).toEqual(
             expect.objectContaining({
@@ -230,13 +230,13 @@ describe.only("GET /api/articles", () => {
 
   test("returns 200 and expected array of objects in ascending order of created_at with asc query param", () => {
     return request(app)
-      .get("/api/articles?order=asc&topic=paper")
+      .get("/api/articles?order=asc&topic=cats")
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toBeInstanceOf(Array);
         expect(articles).toBeSortedBy("created_at", { descending: false });
-        expect(articles).toHaveLength(12);
+        expect(articles).toHaveLength(1);
         articles.forEach((articles) => {
           expect(articles).toEqual(
             expect.objectContaining({
