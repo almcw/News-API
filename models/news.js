@@ -77,17 +77,24 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
   if (!["asc", "desc"].includes(order)) {
     return Promise.reject({ status: 400, msg: "Invalid order query" });
   }
-  if (!["mitch", "cats", "paper"].includes(topic)) {
+  if (topic && !["mitch", "cats", "paper"].includes(topic)) {
     return Promise.reject({ status: 400, msg: "Invalid topic query" });
   }
-  return db
-    .query(
-      `SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id, users.username ORDER BY ${sort_by} ${order} ;`
-    )
-    .then((result) => {
-      console.log(result.rows);
-      return result.rows;
-    });
+
+  const queryValues = [];
+  let queryStr = `SELECT users.username AS author, title, articles.article_id, topic, articles.created_at, articles.votes, count(comment_id)::INT AS comment_count FROM articles INNER JOIN users ON articles.author = users.username LEFT JOIN comments ON articles.article_id = comments.article_id `;
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr += ` WHERE articles.topic = $1`;
+  }
+
+  queryStr += ` GROUP BY articles.article_id, users.username ORDER BY ${sort_by} ${order};`;
+  // console.log(queryStr);
+  // console.log(queryValues);
+  return db.query(queryStr, queryValues).then((result) => {
+    return result.rows;
+  });
 };
 
 exports.postComment = (article_id, username, body) => {
