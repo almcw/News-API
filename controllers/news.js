@@ -6,6 +6,7 @@ const {
   selectCommentsByArticleId,
   selectArticles,
   postComment,
+  deleteCommentInDb,
 } = require("../models/news");
 
 exports.getTopics = (req, res) => {
@@ -66,5 +67,12 @@ exports.postComment = (req, res, next) => {
     .then((results) => {
       res.status(201).send({ comment: results });
     })
+    .catch(next);
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  deleteCommentInDb(comment_id)
+    .then(() => res.status(204).send({}))
     .catch(next);
 };

@@ -175,7 +175,7 @@ describe("GET /api/users", () => {
   });
 });
 
-describe.only("GET /api/articles", () => {
+describe("GET /api/articles", () => {
   test("returns 400 when topic is invalid", () => {
     return request(app)
       .get("/api/articles?topic=injection")
@@ -374,4 +374,15 @@ test("returns 400 error when passed invalid article_id", () => {
     .then(({ body }) => {
       expect(body.msg).toBe("bad request");
     });
+});
+
+describe.only("DELETE /api/comments/:comment_id", () => {
+  test("should return status 204 and no content ", () => {
+    return request(app)
+      .delete("/api/comments/12")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
 });
